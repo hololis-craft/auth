@@ -1,11 +1,16 @@
 package me.f0reach.holofans.auth;
 
-import com.discordsrv.api.DiscordSRVApi;
+import de.erdbeerbaerlp.dcintegration.common.DiscordIntegration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class AuthPlugin extends JavaPlugin {
-    private final DiscordSRVListener discordSRVListener = new DiscordSRVListener(this);
+    private static AuthPlugin plugin = null;
     private final Config config = new Config(this);
+    private DiscordAddon discordAddon = null;
+
+    public static AuthPlugin getPlugin() {
+        return plugin;
+    }
 
     public Config getAppConfig() {
         return config;
@@ -17,7 +22,9 @@ public final class AuthPlugin extends JavaPlugin {
         saveDefaultConfig();
         getAppConfig().load();
 
-        DiscordSRVApi.get().eventBus().subscribe(discordSRVListener);
+        discordAddon = new DiscordAddon(DiscordIntegration.INSTANCE);
+
+        plugin = this;
     }
 
     @Override

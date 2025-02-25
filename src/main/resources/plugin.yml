@@ -4,4 +4,4 @@ main: me.f0reach.holofans.auth.AuthPlugin
 api-version: '1.21'
 prefix: HoloFansAuth
 description: Holofans MC Server Plugin
-depend: [ DiscordSRV-Ascension ]
+depend: [ DiscordIntegration ]
