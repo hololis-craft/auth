@@ -1,0 +1,6 @@
+name: HoloFans-Auth
+version: '1.0-SNAPSHOT'
+main: me.f0reach.holofans.auth.AuthPlugin
+api-version: '1.21'
+prefix: HoloFansAuth
+description: Holofans MC Server Plugin
