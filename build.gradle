@@ -18,12 +18,12 @@ repositories {
     maven {
         url = 'https://nexus.scarsz.me/content/groups/public/'
     }
-
+    mavenLocal()
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
-    compileOnly('com.discordsrv:discordsrv:1.28.0')
+    compileOnly('com.discordsrv:api:3.0.0-SNAPSHOT')
 }
 
 def targetJavaVersion = 21

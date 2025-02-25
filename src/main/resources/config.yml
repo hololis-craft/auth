@@ -1,1 +1,4 @@
-baseUrl: 
+baseUrl: http://localhost:25566
+guildId: "1343808781338808411"
+adminRoles:
+  - "310653587761922048"
