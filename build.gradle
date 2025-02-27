@@ -16,12 +16,14 @@ repositories {
         url = "https://oss.sonatype.org/content/groups/public/"
     }
     maven { url "https://repo.erdbeerbaerlp.de/repository/maven-public/" }
+    maven { url "https://repo.dmulloy2.net/repository/public/" }
     mavenLocal()
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     compileOnly 'de.erdbeerbaerlp:dcintegration.common:3.0.7'
+    compileOnly 'com.comphenix.protocol:ProtocolLib:5.1.0'
     compileOnly group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.1'
 }
 

@@ -1,7 +1,7 @@
 package me.f0reach.holofans.auth;
 
 import de.erdbeerbaerlp.dcintegration.common.DiscordIntegration;
-import de.erdbeerbaerlp.dcintegration.common.addon.DiscordIntegrationAddon;
+import de.erdbeerbaerlp.dcintegration.common.storage.linking.LinkManager;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -32,8 +32,38 @@ public class DiscordAddon extends ListenerAdapter {
     @Override
     public void onModalInteraction(ModalInteractionEvent event) {
         if (event.getModalId().equals(FORM_ID)) {
-            var code = event.getInteraction().getValue(FORM_CODE_ID).getAsString();
-            event.reply("コードを受け取りました: " + code).queue();
+            try {
+                var code = event.getInteraction().getValue(FORM_CODE_ID).getAsString();
+                var intCode = Integer.parseInt(code);
+                // Check if the user is already linked both in Java and Bedrock
+                if (LinkManager.isDiscordUserLinkedToJava(event.getUser().getId()) &&
+                        LinkManager.isDiscordUserLinkedToBedrock(event.getUser().getId())) {
+                    event.reply("あなたはすでにアカウント情報が登録されています").queue();
+                    return;
+                }
+                // Get link info from LinkManager.pendingLinks or LinkManager.pendingBedrockLinks
+                var linkSuccessful = false;
+                if (!LinkManager.isDiscordUserLinkedToJava(event.getUser().getId())) {
+                    var link = LinkManager.pendingLinks.get(intCode);
+                    if (link != null) {
+                        linkSuccessful = LinkManager.linkPlayer(event.getUser().getId(), link.getValue());
+                    }
+                }
+                if (!linkSuccessful && !LinkManager.isDiscordUserLinkedToBedrock(event.getUser().getId())) {
+                    var link = LinkManager.pendingBedrockLinks.get(intCode);
+                    if (link != null) {
+                        linkSuccessful = LinkManager.linkBedrockPlayer(event.getUser().getId(), link.getValue());
+                    }
+                }
+                if (linkSuccessful) {
+                    LinkManager.save();
+                    event.deferReply(true).addContent("接続が成功しました").queue();
+                } else {
+                    event.deferReply(true).addContent("接続が失敗しました。すでに他のアカウントで入っていませんか？").queue();
+                }
+            } catch (NumberFormatException e) {
+                event.deferReply(true).addContent("コードが無効です").queue();
+            }
         }
     }
 
@@ -59,7 +89,7 @@ public class DiscordAddon extends ListenerAdapter {
     private Modal createAuthForm() {
         TextInput textInput = TextInput.create(FORM_CODE_ID, "コードを入力してください", TextInputStyle.SHORT)
                 .setPlaceholder("コード")
-                .setRequiredRange(6, 6)
+                .setRequiredRange(5, 5)
                 .setRequired(true).build();
         return Modal.create(FORM_ID, "コード入力")
                 .setTitle("Minecraftのコード")
