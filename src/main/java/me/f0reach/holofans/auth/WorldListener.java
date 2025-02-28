@@ -15,11 +15,13 @@ public class WorldListener implements Listener {
     private final AuthPlugin plugin;
     private final DiscordAddon discordAddon;
     private final Set<UUID> notLinkedPlayers;
+    private final AuthView authView;
 
     public WorldListener(AuthPlugin plugin, DiscordAddon discordAddon) {
         this.plugin = plugin;
         this.discordAddon = discordAddon;
         this.notLinkedPlayers = new HashSet<>();
+        this.authView = new AuthView(plugin);
     }
 
     @EventHandler
@@ -35,6 +37,11 @@ public class WorldListener implements Listener {
             player.teleport(teleportLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
             notLinkedPlayers.add(uuid);
         }
+
+
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            authView.ensureMapSet(player);
+        }, 20L);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

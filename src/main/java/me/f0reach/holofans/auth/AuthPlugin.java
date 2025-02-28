@@ -36,6 +36,7 @@ public final class AuthPlugin extends JavaPlugin {
             worldListener = new WorldListener(this, discordAddon);
 
             getServer().getPluginManager().registerEvents(worldListener, this);
+            getCommand("holofansauth").setExecutor(new McCommand(this));
         }
     }
 

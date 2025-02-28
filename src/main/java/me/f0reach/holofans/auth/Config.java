@@ -8,6 +8,7 @@ public class Config {
     private String baseUrl;
     private String verifyWorld;
     private Vector verifySpawnPosition;
+    private Vector verifyMessagePosition;
     private double verifySpawnYaw;
     private BoundingBox verifyAllowedArea;
 
@@ -21,6 +22,7 @@ public class Config {
         var verifySection = this.plugin.getConfig().getConfigurationSection("verifyRoom");
         verifyWorld = verifySection.getString("world");
         verifySpawnPosition = verifySection.getVector("spawnPosition");
+        verifyMessagePosition = verifySection.getVector("messagePosition");
         verifySpawnYaw = verifySection.getDouble("spawnYaw");
         var allowedArea1 = verifySection.getVector("bbox1");
         var allowedArea2 = verifySection.getVector("bbox2");
@@ -37,6 +39,10 @@ public class Config {
 
     public Vector getVerifySpawnPosition() {
         return verifySpawnPosition;
+    }
+
+    public Vector getVerifyMessagePosition() {
+        return verifyMessagePosition;
     }
 
     public double getVerifySpawnYaw() {

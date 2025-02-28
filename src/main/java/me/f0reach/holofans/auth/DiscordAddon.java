@@ -28,6 +28,11 @@ public class DiscordAddon extends ListenerAdapter {
         return LinkManager.isPlayerLinked(uuid);
     }
 
+    public String getVerifyCode(UUID uuid) {
+        // @todo Implement for bedrock code
+        return Integer.toString(LinkManager.genLinkNumber(uuid));
+    }
+
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
         if (event.getComponentId().equals(CONNECT_BUTTON_ID)) {

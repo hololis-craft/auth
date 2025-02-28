@@ -7,6 +7,12 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class McCommand implements CommandExecutor {
+    private final AuthPlugin plugin;
+
+    public McCommand(AuthPlugin plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public boolean onCommand(
             @NotNull CommandSender commandSender,
@@ -23,10 +29,8 @@ public class McCommand implements CommandExecutor {
                 return true;
             }
 
-            if (args[0].equals("setspawn")) {
-                player.sendMessage("Set spawn command");
-            } else if (args[0].equals("setbbox")) {
-                player.sendMessage("Set bbox command");
+            if (args[0].equals("givemap")) {
+                
             }
         }
 

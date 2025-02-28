@@ -5,3 +5,8 @@ api-version: '1.21'
 prefix: HoloFansAuth
 description: Holofans MC Server Plugin
 depend: [ DiscordIntegration ]
+commands:
+  holofansauth:
+    description: Your description
+    usage: /<command>
+    permission: holofansauth.command
