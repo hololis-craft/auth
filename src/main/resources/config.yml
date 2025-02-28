@@ -1,4 +1,15 @@
 baseUrl: http://localhost:25566
-guildId: "1343808781338808411"
-adminRoles:
-  - "310653587761922048"
+verifyRoom:
+  world: "lobby"
+  spawnPosition:
+    x: 0
+    y: 0
+    z: 0
+  bbox1:
+    x: -1
+    y: -1
+    z: -1
+  bbox2:
+    x: 1
+    y: 1
+    z: 1

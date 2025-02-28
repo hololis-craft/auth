@@ -7,6 +7,7 @@ public final class AuthPlugin extends JavaPlugin {
     private static AuthPlugin plugin = null;
     private final Config config = new Config(this);
     private DiscordAddon discordAddon = null;
+    private WorldListener worldListener = null;
 
     public static AuthPlugin getPlugin() {
         return plugin;
@@ -19,12 +20,23 @@ public final class AuthPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        saveDefaultConfig();
-        getAppConfig().load();
-
-        discordAddon = new DiscordAddon(DiscordIntegration.INSTANCE);
+        var bootable = false;
+        try {
+            saveDefaultConfig();
+            getAppConfig().load();
+            bootable = true;
+        } catch (Exception e) {
+            getLogger().severe("Failed to load config: " + e.getMessage());
+        }
 
         plugin = this;
+
+        if (bootable) {
+            discordAddon = new DiscordAddon(DiscordIntegration.INSTANCE);
+            worldListener = new WorldListener(this, discordAddon);
+
+            getServer().getPluginManager().registerEvents(worldListener, this);
+        }
     }
 
     @Override

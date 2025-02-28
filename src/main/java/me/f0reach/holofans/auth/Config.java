@@ -1,35 +1,49 @@
 package me.f0reach.holofans.auth;
 
-import org.bukkit.plugin.Plugin;
-
-import java.util.List;
+import org.bukkit.util.BoundingBox;
+import org.bukkit.util.Vector;
 
 public class Config {
     private final AuthPlugin plugin;
-    private String guildId;
     private String baseUrl;
-    private List<String> adminRoles;
+    private String verifyWorld;
+    private Vector verifySpawnPosition;
+    private double verifySpawnYaw;
+    private BoundingBox verifyAllowedArea;
 
     public Config(AuthPlugin plugin) {
         this.plugin = plugin;
-        load();
     }
 
     public void load() {
         baseUrl = this.plugin.getConfig().getString("baseUrl");
-        guildId = this.plugin.getConfig().getString("guildId");
-        adminRoles = this.plugin.getConfig().getStringList("adminRoles");
+
+        var verifySection = this.plugin.getConfig().getConfigurationSection("verifyRoom");
+        verifyWorld = verifySection.getString("world");
+        verifySpawnPosition = verifySection.getVector("spawnPosition");
+        verifySpawnYaw = verifySection.getDouble("spawnYaw");
+        var allowedArea1 = verifySection.getVector("bbox1");
+        var allowedArea2 = verifySection.getVector("bbox2");
+        verifyAllowedArea = BoundingBox.of(allowedArea1, allowedArea2);
     }
 
     public String getBaseUrl() {
         return baseUrl;
     }
 
-    public String getGuildId() {
-        return guildId;
+    public String getVerifyWorld() {
+        return verifyWorld;
     }
 
-    public List<String> getAdminRoles() {
-        return adminRoles;
+    public Vector getVerifySpawnPosition() {
+        return verifySpawnPosition;
+    }
+
+    public double getVerifySpawnYaw() {
+        return verifySpawnYaw;
+    }
+
+    public BoundingBox getVerifyAllowedArea() {
+        return verifyAllowedArea;
     }
 }

@@ -11,6 +11,8 @@ import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
 
+import java.util.UUID;
+
 public class DiscordAddon extends ListenerAdapter {
     private static final String FORM_ID = "HoloFansAuth";
     private static final String FORM_CODE_ID = "pin-input";
@@ -20,6 +22,10 @@ public class DiscordAddon extends ListenerAdapter {
     public DiscordAddon(DiscordIntegration integration) {
         this.integration = integration;
         integration.getJDA().addEventListener(this);
+    }
+
+    public boolean hasLinked(UUID uuid) {
+        return LinkManager.isPlayerLinked(uuid);
     }
 
     @Override
