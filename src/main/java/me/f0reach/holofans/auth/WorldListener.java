@@ -5,6 +5,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,7 +32,7 @@ public class WorldListener implements Listener {
             var verifyWorld = plugin.getServer().getWorld(plugin.getAppConfig().getVerifyWorld());
             var teleportLocation = config.getVerifySpawnPosition().toLocation(verifyWorld);
             teleportLocation.setYaw((float) config.getVerifySpawnYaw());
-            player.teleport(teleportLocation);
+            player.teleport(teleportLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
             notLinkedPlayers.add(uuid);
         }
     }
@@ -50,6 +51,18 @@ public class WorldListener implements Listener {
         if (!allowedArea.contains(event.getTo().toVector())) {
             player.sendMessage("連携を完了するまでこのエリアから移動できません");
             event.setTo(event.getFrom());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        // notLinkedPlayers cannot teleport using commands / ender pearls / chorus fruits
+        if (event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN) return;
+        var player = event.getPlayer();
+        var uuid = player.getUniqueId();
+        if (notLinkedPlayers.contains(uuid)) {
+            player.sendMessage("連携を完了するまでテレポートできません");
+            event.setCancelled(true);
         }
     }
 }
