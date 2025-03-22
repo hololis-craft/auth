@@ -29,6 +29,10 @@ public class WorldListener implements Listener {
         var player = event.getPlayer();
         var uuid = player.getUniqueId();
         var config = plugin.getAppConfig();
+        if (player.isWhitelisted()) {
+            // ホワイトリストは無視
+            return;
+        }
         if (!discordAddon.hasLinked(uuid)) {
             player.sendMessage("アカウントがリンクされていません。Discordでリンクしてください。");
             var verifyWorld = plugin.getServer().getWorld(plugin.getAppConfig().getVerifyWorld());
@@ -44,6 +48,7 @@ public class WorldListener implements Listener {
         }, 20L);
     }
 
+
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
         // Check if notLinkedPlayers is in the allowed area
@@ -53,9 +58,15 @@ public class WorldListener implements Listener {
             return;
         }
 
+        if (discordAddon.hasLinked(uuid)) {
+            notLinkedPlayers.remove(uuid);
+            return;
+        }
+
         var config = plugin.getAppConfig();
         var allowedArea = config.getVerifyAllowedArea();
-        if (!allowedArea.contains(event.getTo().toVector())) {
+        var to = event.getTo().toVector();
+        if (!allowedArea.contains(to)) {
             player.sendMessage("連携を完了するまでこのエリアから移動できません");
             event.setTo(event.getFrom());
         }

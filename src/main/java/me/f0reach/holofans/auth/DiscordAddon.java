@@ -98,7 +98,8 @@ public class DiscordAddon extends ListenerAdapter {
     }
 
     private Modal createAuthForm() {
-        TextInput textInput = TextInput.create(FORM_CODE_ID, "コードを入力してください", TextInputStyle.SHORT)
+        TextInput textInput = TextInput
+                .create(FORM_CODE_ID, "コードを入力してください", TextInputStyle.SHORT)
                 .setPlaceholder("コード")
                 .setRequiredRange(5, 5)
                 .setRequired(true).build();
